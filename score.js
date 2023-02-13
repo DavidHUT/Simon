@@ -1,37 +1,37 @@
 function loadScores() {
-    let score = [];
+    let scores = [];
 
-    const scoreText = localStorage.getItem('score');
+    const scoresText = localStorage.getItem('scores');
 
-    if(scoreText) {
-        score = JSON.parse(scoreText);
+    if(scoresText) {
+        scores = JSON.parse(scoresText);
     }
 
-    const table = document.querySelector('#score');
+    const tableBodyEl = document.querySelector('#scores');
 
-    if(score.length) {
-        for (const [i, score2] of score.entries()) {
-            const position = document.createElement('td');
-            const name = document.createElement('td');
-            const score1 = document.createElement('td');
-            const date = document.createElement('td');
+    if(scores.length) {
+        for (const [i, score] of scores.entries()) {
+            const positionTdEl = document.createElement('td');
+            const nameTdEl = document.createElement('td');
+            const scoreTdEl = document.createElement('td');
+            const dateTdEl = document.createElement('td');
 
-            position.textContent = i + 1;
-            name.textContent = score2.name;
-            score1.textContent = score2.score;
-            date.textContent = score2.date;
+            positionTdEl.textContent = i + 1;
+            nameTdEl.textContent = score.name;
+            scoreTdEl.textContent = score.score;
+            dateTdEl.textContent = score.date;
 
-            const row = document.createElement('tr');
+            const rowEl = document.createElement('tr');
 
-            row.appendChild(position);
-            row.appendChild(name);
-            row.appendChild(score1);
-            row.appendChild(date);
+            rowEl.appendChild(positionTdEl);
+            rowEl.appendChild(nameTdEl);
+            rowEl.appendChild(scoreTdEl);
+            rowEl.appendChild(dateTdEl);
 
-            table;appendChild(row);
+            tableBodyEl.appendChild(rowEl);
         }
     } else {
-        table.innerHTML = '<tr><td colSpan=4>Be the first to score</td></tr>';
+        tableBodyEl.innerHTML = '<tr><td colSpan=4>Be the first to score</td></tr>';
     }
 }
 
