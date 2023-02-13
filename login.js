@@ -1,5 +1,5 @@
 function login() {
-    const name = document.querySelector("#name");
-    localStorage.setItem("userName", name.value);
+    const nameEL = document.querySelector("#name");
+    localStorage.setItem("userName", nameEL.value);
     window.location.href = "play.html";
 }
