@@ -5,7 +5,6 @@ class Button {
 
     this.press = async function (delayMs = 500, playSound = true) {
       el.style.filter = 'brightness(100%)';
-
       if (playSound) {
         this.sound.play();
       }
@@ -32,12 +31,10 @@ class Game {
 
     const sounds = ['assets_sound1.mp3', 'assets_sound2.mp3', 'public_assets_sound3.mp3', 'assets_sound4.mp3'];
     document.querySelectorAll('.game-button').forEach((el, i) => {
-
       if (i < sounds.length) {
         this.#buttons.set(el.id, new Button(sounds[i], el));
         el.style.filter = 'brightness(50%)';
       }
-
     });
 
     const playerNameEl = document.querySelector('.player-name');
@@ -45,7 +42,6 @@ class Game {
   }
 
   async pressButton(button) {
-
     if (this.#allowPlayer) {
       this.#allowPlayer = false;
       await this.#buttons.get(button.id).press();
@@ -78,20 +74,17 @@ class Game {
     this.#allowPlayer = true;
   }
 
-  #getPlayerName() {
-    return localStorage.getItem('userName') ?? 'Mystery player';
-  }
-
   async #playSequence(delayMs = 0) {
-
     if (delayMs > 0) {
       await delay(delayMs);
     }
-
     for (const btn of this.#sequence) {
       await btn.press();
     }
+  }
 
+  #getPlayerName() {
+    return localStorage.getItem('userName') ?? 'Mystery player';
   }
 
   #addNote() {
@@ -105,13 +98,11 @@ class Game {
   }
 
   async #buttonDance(laps = 5) {
-
     for (let step = 0; step < laps; step++) {
       for (const btn of this.#buttons.values()) {
         await btn.press(100, false);
       }
     }
-
   }
 
   #getRandomButton() {
@@ -119,28 +110,35 @@ class Game {
     return buttons[Math.floor(Math.random() * this.#buttons.size)];
   }
 
-  #saveScore(score) {
+  async #saveScore(score) {
     const userName = this.#getPlayerName();
+    const date = new Date().toLocaleDateString();
+    const newScore = { name: userName, score: score, date: date };
+
+    try {
+      const response = await fetch('/api/score', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(newScore),
+      });
+
+      const scores = await response.json();
+      localStorage.setItem('scores', JSON.stringify(scores));
+    } catch {
+      this.#updateScoresLocal(newScore);
+    }
+  }
+
+  #updateScoresLocal(newScore) {
     let scores = [];
     const scoresText = localStorage.getItem('scores');
-
     if (scoresText) {
       scores = JSON.parse(scoresText);
     }
 
-    scores = this.#updateScores(userName, score, scores);
-
-    localStorage.setItem('scores', JSON.stringify(scores));
-  }
-
-  #updateScores(userName, score, scores) {
-    const date = new Date().toLocaleDateString();
-    const newScore = { name: userName, score: score, date: date };
-
     let found = false;
-    
     for (const [i, prevScore] of scores.entries()) {
-      if (score > prevScore.score) {
+      if (newScore > prevScore.score) {
         scores.splice(i, 0, newScore);
         found = true;
         break;
@@ -155,7 +153,7 @@ class Game {
       scores.length = 10;
     }
 
-    return scores;
+    localStorage.setItem('scores', JSON.stringify(scores));
   }
 }
 
