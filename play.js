@@ -9,7 +9,6 @@ class Button {
       if (playSound) {
         this.sound.play();
       }
-
       await delay(delayMs);
       el.style.filter = 'brightness(50%)';
       await delay(100);
@@ -29,9 +28,9 @@ class Game {
     this.#allowPlayer = false;
     this.#sequence = [];
     this.#playerPlaybackPos = 0;
-    this.#mistakeSound = loadSound('error.mp3');
+    this.#mistakeSound = loadSound('assets_error.mp3');
 
-    const sounds = ['sound1.mp3', 'sound2.mp3', 'sound3.mp3', 'sound4.mp3'];
+    const sounds = ['assets_sound1.mp3', 'assets_sound2.mp3', 'public_assets_sound3.mp3', 'assets_sound4.mp3'];
     document.querySelectorAll('.game-button').forEach((el, i) => {
 
       if (i < sounds.length) {
