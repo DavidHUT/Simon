@@ -1,3 +1,6 @@
+/**
+  https://picsum.photos/
+ */
 function displayPicture(data) {
   const containerEl = document.querySelector("#picture");
 
@@ -10,6 +13,9 @@ function displayPicture(data) {
   containerEl.appendChild(imgEl);
 }
 
+/**
+  https://github.com/lukePeavey/quotable
+ */
 function displayQuote(data) {
   const containerEl = document.querySelector("#quote");
 
